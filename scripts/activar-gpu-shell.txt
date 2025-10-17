@@ -1,0 +1,1 @@
+srun --partition=gpu --gres=gpu:MI210:1 --time=10:00 --pty /bin/bash
