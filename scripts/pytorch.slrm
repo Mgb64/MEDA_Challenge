@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#SBATCH --job-name=primer_slurm
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --time=1:00:00
+#SBATCH --partition=gpu
+#SBATCH --gres=gpu:MI210:1
+
+# Activamos ambiente PIP
+# Si todavía no has creado el ambiente, ejecuta los commandos siguientes:
+# python -m venv .venv (o cualquier nombre)
+# source .venv/bin/activate
+# pip install -r requirements.txt
+# source .venv/bin/activate
+# echo "venv: {$VIRTUAL_ENV}"
+
+# Activamos ambiente CONDA
+conda init
+conda activate manu
+conda info --envs
+
+# Utilización de los gpus asignados
+echo "Nodo: $(hostname)"
+echo "$(rocm-smi --showuse)"
+echo 
+
+# Corremos entrenamiento
+time srun python asdf.py
