@@ -7,7 +7,7 @@
 
 # --- Configuration ---
 VENV_PATH="/lustre/proyectos/p032/env/bin/activate"
-JUPYTER_PORT="8888"
+JUPYTER_PORT="9999"
 
 # --- Script Logic ---
 
@@ -25,11 +25,6 @@ echo "Active environment: $VIRTUAL_ENV"
 echo ""
 echo "--- Starting Jupyter Lab ---"
 
-# 2. Run the Jupyter Lab command
-# --no-browser prevents the remote server from trying to open a GUI browser.
-# --port sets the port for the tunnel.
-# --ip=0.0.0.0 is CRITICAL for accepting the forwarded connection from the login node.
-jupyter lab --no-browser --port="$JUPYTER_PORT" --ip=0.0.0.0
 
 echo ""
 echo "--- Important Instructions ---"
@@ -38,3 +33,9 @@ echo "2. Note the 'token' in the URL printed above."
 echo "3. From your LOCAL PC, run the SSH tunnel command:"
 echo "   ssh -L $JUPYTER_PORT:$(hostname -f):$JUPYTER_PORT your_username@login_node_ip"
 echo "4. Access the notebook in your local browser at: http://localhost:$JUPYTER_PORT/lab?token=..."
+
+# 2. Run the Jupyter Lab command
+# --no-browser prevents the remote server from trying to open a GUI browser.
+# --port sets the port for the tunnel.
+# --ip=0.0.0.0 is CRITICAL for accepting the forwarded connection from the login node.
+jupyter lab --no-browser --port="$JUPYTER_PORT" --ip=0.0.0.0
