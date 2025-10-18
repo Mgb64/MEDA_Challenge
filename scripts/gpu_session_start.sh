@@ -13,7 +13,7 @@ PARTITION="gpu"
 GRES="gpu:MI210:1"
 
 # Sets the maximum job time to 10 minutes (adjust as needed, e.g., 4:00:00 for 4 hours)
-TIME="10:00" 
+TIME="10:00:00" 
 
 # Sets the shell to open interactively
 SHELL_TYPE="/bin/bash"
