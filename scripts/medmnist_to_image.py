@@ -19,7 +19,6 @@ DATASETS_2D = [
     "octmnist",
     "pneumoniamnist",
     "retinamnist",
-    "breastmnist",
     "bloodmnist",
     "tissuemnist",
     "organmnist_axial",
