@@ -5,13 +5,14 @@ from tqdm import tqdm
 import medmnist
 from medmnist import INFO
 
-# --- Configuración ---
+# --- Configuración temporal ---
+# Guardaremos las imágenes en la carpeta actual para no afectar el entorno del clúster
 ROOT = "/lustre/proyectos/p032/datasets"
-OUTPUT_DIR = ROOT + "/all_medmnist_images"  # Carpeta donde irán todas las imágenes
+OUTPUT_DIR = ROOT + "/all_medmnist_images2"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# Lista de todos los datasets 2D en MedMNIST v2
-# Excluimos los 3D ('organmnist_3d', 'nodulemnist_3d', 'adrenalmnist_3d', 'fracturemnist_3d', 'vesselmnist_3d', 'synapsemnist_3d')
+# --- Lista temporal de datasets ---
+# Comentamos todos los datasets excepto el primero (pathmnist)
 DATASETS_2D = [
     "pathmnist",
     "chestmnist",
@@ -19,58 +20,56 @@ DATASETS_2D = [
     "octmnist",
     "pneumoniamnist",
     "retinamnist",
-    "breastmnist",
     "bloodmnist",
     "tissuemnist",
-    "organmnist_axial",
-    "organmnist_coronal",
-    "organmnist_sagittal",
+    "organamnist",
+    "organcmnist",
+    "organsmnist",
 ]
 
-print(
-    f"Iniciando extracción de {len(DATASETS_2D)} datasets 2D a la carpeta '{OUTPUT_DIR}'..."
-)
-print("Esto puede tardar un buen rato...")
+print(f"Iniciando extracción de {len(DATASETS_2D)} dataset(s) a la carpeta '{OUTPUT_DIR}'...")
+print("Esto puede tardar un rato dependiendo del dataset...")
 
 total_images_saved = 0
 
-# --- Bucle Principal de Extracción ---
+# --- Bucle principal de extracción ---
 for dataset_name in DATASETS_2D:
     print(f"\nProcesando: {dataset_name}")
 
-    # Obtener información del dataset (para saber si es RGB o Grayscale)
+    # Obtener información del dataset (RGB o Grayscale)
     info = INFO[dataset_name]
     n_channels = info["n_channels"]
+    image_mode = "RGB" if n_channels == 3 else "L"
 
-    # Determinar el modo de la imagen para PIL
-    image_mode = "RGB" if n_channels == 3 else "L"  # 'L' es para grayscale
-
-    # Cargar los datos usando la biblioteca medmnist
+    # Cargar la clase correspondiente del dataset
     DataClass = getattr(medmnist, info["python_class"])
 
-    # Iterar sobre todos los splits (train, val, test)
-    # Queremos TODAS las imágenes para el SSL
+    # --- Crear estructura de carpetas ---
+    dataset_dir = os.path.join(OUTPUT_DIR, dataset_name)
+    os.makedirs(dataset_dir, exist_ok=True)
+
+    # Procesar cada split (train, val, test)
     for split in ["train", "val", "test"]:
         try:
+            # Crear subcarpeta del split dentro del dataset
+            split_dir = os.path.join(dataset_dir, split)
+            os.makedirs(split_dir, exist_ok=True)
+
             # Descargar y cargar los datos
             data = DataClass(split=split, download=True, root=ROOT)
             images = data.imgs
 
             print(f"  -> Extrayendo {len(images)} imágenes del split '{split}'...")
 
-            # Bucle para guardar cada imagen
+            # Guardar las imágenes en su carpeta correspondiente
             for i in tqdm(range(len(images)), desc=f"  Split {split}", leave=False):
                 img_array = images[i]
-
-                # Convertir el array de NumPy a una imagen de PIL
                 pil_image = Image.fromarray(img_array, mode=image_mode)
 
-                # Crear un nombre de archivo único
-                # Ej: pathmnist_train_000001.png
+                # Nombre del archivo dentro de su split
                 filename = f"{dataset_name}_{split}_{i:06d}.png"
-                filepath = os.path.join(OUTPUT_DIR, filename)
+                filepath = os.path.join(split_dir, filename)
 
-                # Guardar la imagen
                 pil_image.save(filepath)
                 total_images_saved += 1
 

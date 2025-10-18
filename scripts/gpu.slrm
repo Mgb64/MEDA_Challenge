@@ -3,7 +3,7 @@
 #SBATCH --job-name=primer_slurm
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --time=1:00:00
+#SBATCH --time=5:00:00
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:MI210:1
 
@@ -12,13 +12,13 @@
 # python -m venv .venv (o cualquier nombre)
 # source .venv/bin/activate
 # pip install -r requirements.txt
-# source .venv/bin/activate
-# echo "venv: {$VIRTUAL_ENV}"
+source /lustre/proyectos/p032/env/bin/activate
+echo "venv: {$VIRTUAL_ENV}"
 
 # Activamos ambiente CONDA
-conda init
-conda activate manu
-conda info --envs
+# conda init
+# conda activate manu
+# conda info --envs
 
 # Utilización de los gpus asignados
 echo "Nodo: $(hostname)"
@@ -26,4 +26,4 @@ echo "$(rocm-smi --showuse)"
 echo 
 
 # Corremos entrenamiento
-time srun python asdf.py
+time srun python medmnist_to_image.py
