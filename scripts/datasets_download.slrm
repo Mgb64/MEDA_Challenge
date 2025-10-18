@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#SBATCH --job-name=primer_slurm
+#SBATCH --nodes=3
+#SBATCH --ntasks=9
+#SBATCH --time=1:00:00
+#SBATCH --partition=cpu
+
+echo "Comienzo del trabajo: $(date)"
+echo "Nodos asignados: $SLURM_NODELIST"
+echo "Número de nodos: $SLURM_JOB_NUM_NODES"
+echo "Número de tareas: $SLURM_NTASKS"
+
+srun bash -c 'echo "Tarea $SLURM_PROCID corriendo en nodo $(hostname)"'
+sleep 10
+
+source /lustre/proyectos/p032/env/bin/activate
+echo "venv: {$VIRTUAL_ENV}"
+python medmnist_to_image.py
+
+echo "Termino del trabajo: $(date)"
