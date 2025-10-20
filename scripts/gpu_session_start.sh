@@ -10,7 +10,7 @@
 PARTITION="gpu"
 
 # Requests 1 MI210 GPU
-GRES="gpu:MI210:1"
+GRES="gpu:MI210:4"
 
 # Sets the maximum job time to 10 minutes (adjust as needed, e.g., 4:00:00 for 4 hours)
 TIME="10:00:00" 
