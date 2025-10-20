@@ -6,25 +6,51 @@
 # that require the MI210 GPU, such as running python asdf.py interactively.
 
 # --- SLURM Configuration ---
-# Requests the 'gpu' partition
-PARTITION="gpu"
+PARTITION="gpu"           # Requests the 'gpu' partition
+GRES="gpu:MI210:4"        # Requests 1 MI210 GPU
+TIME="10:00:00"           # Maximum job time (e.g., 4:00:00 for 4 hours)
+SHELL_TYPE="/bin/bash"    # Shell type for the interactive session
 
-# Requests 1 MI210 GPU
-GRES="gpu:MI210:4"
+# --- MIOpen Configuration ---
+CACHE_DIR="$HOME/.miopen_cache"
+USER_DB_DIR="$HOME/.miopen_user_db"
 
-# Sets the maximum job time to 10 minutes (adjust as needed, e.g., 4:00:00 for 4 hours)
-TIME="10:00:00" 
+echo "🔍 Checking MIOpen directories..."
 
-# Sets the shell to open interactively
-SHELL_TYPE="/bin/bash"
+# Create directories if they don't exist
+if [ ! -d "$CACHE_DIR" ]; then
+    echo "📁 Creating folder: $CACHE_DIR"
+    mkdir -p "$CACHE_DIR"
+else
+    echo "✅ Folder already exists: $CACHE_DIR"
+fi
 
-# --- Execution ---
-echo "Attempting to request an interactive session on a GPU node..."
-echo "Resources requested: Partition=${PARTITION}, GPU=${GRES}, Time=${TIME}"
+if [ ! -d "$USER_DB_DIR" ]; then
+    echo "📁 Creating folder: $USER_DB_DIR"
+    mkdir -p "$USER_DB_DIR"
+else
+    echo "✅ Folder already exists: $USER_DB_DIR"
+fi
 
-# Execute the srun command to establish the interactive session
+# Export environment variables
+export MIOPEN_CUSTOM_CACHE_DIR="$CACHE_DIR"
+export MIOPEN_USER_DB_PATH="$USER_DB_DIR"
+
+echo "🌱 MIOpen environment configured:"
+echo "  MIOPEN_CUSTOM_CACHE_DIR=$MIOPEN_CUSTOM_CACHE_DIR"
+echo "  MIOPEN_USER_DB_PATH=$MIOPEN_USER_DB_PATH"
+
+# --- SLURM Job Request ---
+echo
+echo "🚀 Requesting an interactive session on a GPU node..."
+echo "   Partition: ${PARTITION}"
+echo "   GPU: ${GRES}"
+echo "   Time: ${TIME}"
+
+# Launch the interactive session
 srun --partition="$PARTITION" --gres="$GRES" --time="$TIME" --pty "$SHELL_TYPE"
 
-# Note: Once the connection is established, you will be on the compute node.
-# Don't forget to run 'source /path/to/your/venv/bin/activate' before running your scripts.
+# --- Notes ---
+# Once connected, you'll be on the compute node.
+# Run 'source /path/to/your/venv/bin/activate' to activate your environment.
 # Type 'exit' to end the session and release the node.
