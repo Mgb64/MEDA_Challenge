@@ -25,5 +25,62 @@ echo "Nodo: $(hostname)"
 echo "$(rocm-smi --showuse)"
 echo 
 
+# --- MIOpen Configuration ---
+CACHE_DIR="$HOME/.miopen_cache"
+USER_DB_DIR="$HOME/.miopen_user_db"
+
+echo "🔍 Checking MIOpen directories..."
+
+# Create directories if they don't exist
+if [ ! -d "$CACHE_DIR" ]; then
+    echo "📁 Creating folder: $CACHE_DIR"
+    mkdir -p "$CACHE_DIR"
+else
+    echo "✅ Folder already exists: $CACHE_DIR"
+fi
+
+if [ ! -d "$USER_DB_DIR" ]; then
+    echo "📁 Creating folder: $USER_DB_DIR"
+    mkdir -p "$USER_DB_DIR"
+else
+    echo "✅ Folder already exists: $USER_DB_DIR"
+fi
+
+# Export environment variables
+export MIOPEN_CUSTOM_CACHE_DIR="$CACHE_DIR"
+export MIOPEN_USER_DB_PATH="$USER_DB_DIR"
+
+echo "🌱 MIOpen environment configured:"
+echo "  MIOPEN_CUSTOM_CACHE_DIR=$MIOPEN_CUSTOM_CACHE_DIR"
+echo "  MIOPEN_USER_DB_PATH=$MIOPEN_USER_DB_PATH"
+# --- MIOpen Configuration ---
+CACHE_DIR="$HOME/.miopen_cache"
+USER_DB_DIR="$HOME/.miopen_user_db"
+
+echo "🔍 Checking MIOpen directories..."
+
+# Create directories if they don't exist
+if [ ! -d "$CACHE_DIR" ]; then
+    echo "📁 Creating folder: $CACHE_DIR"
+    mkdir -p "$CACHE_DIR"
+else
+    echo "✅ Folder already exists: $CACHE_DIR"
+fi
+
+if [ ! -d "$USER_DB_DIR" ]; then
+    echo "📁 Creating folder: $USER_DB_DIR"
+    mkdir -p "$USER_DB_DIR"
+else
+    echo "✅ Folder already exists: $USER_DB_DIR"
+fi
+
+# Export environment variables
+export MIOPEN_CUSTOM_CACHE_DIR="$CACHE_DIR"
+export MIOPEN_USER_DB_PATH="$USER_DB_DIR"
+
+echo "🌱 MIOpen environment configured:"
+echo "  MIOPEN_CUSTOM_CACHE_DIR=$MIOPEN_CUSTOM_CACHE_DIR"
+echo "  MIOPEN_USER_DB_PATH=$MIOPEN_USER_DB_PATH"
+
 # Corremos entrenamiento
-time srun python medmnist_to_image.py
+time srun python ~/MEDA_Challenge/notebooks/ssl_script.py
