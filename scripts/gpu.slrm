@@ -2,10 +2,10 @@
 
 #SBATCH --job-name=primer_slurm
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --time=5:00:00
+#SBATCH --ntasks-per-node=2
+#SBATCH --time=24:00:00
 #SBATCH --partition=gpu
-#SBATCH --gres=gpu:MI210:1
+#SBATCH --gres=gpu:MI210:2
 
 # Activamos ambiente PIP
 # Si todavía no has creado el ambiente, ejecuta los commandos siguientes:
@@ -83,4 +83,4 @@ echo "  MIOPEN_CUSTOM_CACHE_DIR=$MIOPEN_CUSTOM_CACHE_DIR"
 echo "  MIOPEN_USER_DB_PATH=$MIOPEN_USER_DB_PATH"
 
 # Corremos entrenamiento
-time srun python ~/MEDA_Challenge/notebooks/ssl_script.py
+time srun python ~/MEDA_Challenge/scripts/DT_SSL.py
