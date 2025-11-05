@@ -8,7 +8,7 @@
 # --- SLURM Configuration ---
 PARTITION="gpu"           # Requests the 'gpu' partition
 GRES="gpu:MI210:2"        # Requests 1 MI210 GPU
-TIME="24:00:00"           # Maximum job time (e.g., 4:00:00 for 4 hours)
+TIME="10:00:00"           # Maximum job time (e.g., 4:00:00 for 4 hours)
 SHELL_TYPE="/bin/bash"    # Shell type for the interactive session
 
 # --- MIOpen Configuration ---

@@ -1,9 +1,9 @@
 #!/bin/bash
 
-#SBATCH --job-name=primer_slurm
+#SBATCH --job-name=test_modelo
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=2
-#SBATCH --time=24:00:00
+#SBATCH --time=02:00:00
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:MI210:2
 
@@ -83,4 +83,4 @@ echo "  MIOPEN_CUSTOM_CACHE_DIR=$MIOPEN_CUSTOM_CACHE_DIR"
 echo "  MIOPEN_USER_DB_PATH=$MIOPEN_USER_DB_PATH"
 
 # Corremos entrenamiento
-time srun python ~/MEDA_Challenge/scripts/DT_SSL.py
+time srun python /lustre/home/opacheco/MEDA_Challenge/scripts/OP_morras_test.py
